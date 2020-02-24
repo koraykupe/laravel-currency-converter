@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\AuthorizationIP;
 use Illuminate\Console\Command;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
 class AddAuthorizedIp extends Command
@@ -39,7 +40,11 @@ class AddAuthorizedIp extends Command
      */
     public function handle()
     {
-        AuthorizationIP::create(['ip_address' => $this->argument('ip_address')]);
+        try {
+            AuthorizationIP::create(['ip_address' => $this->argument('ip_address')]);
+        } catch (QueryException $exception) {
+            $this->error('IP is already registered.');
+        }
         Log::info($this->argument('ip_address'). ' is added to the authorization table.');
     }
 }

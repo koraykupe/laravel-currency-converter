@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AuthorizationIp;
 use App\Http\Requests\StoreAuthorizedIpRequest;
-use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
 class AuthorizedIpController extends Controller
@@ -38,18 +38,18 @@ class AuthorizedIpController extends Controller
      */
     public function store(StoreAuthorizedIpRequest $request)
     {
-        try {
-            AuthorizationIp::create(['ip_address' => $request->ip_address]);
-        } catch (QueryException $exception){
-            return redirect()->back()->withErrors('IP is already registered.');
-        }
-        return redirect()->back()->with('success', 'IP has been added successfully.');
+        Artisan::call('add:authorized-ip', [
+            'ip_address' => $request->ip_address,
+        ]);
+
+        return redirect()->back()->with('success', 'Your request will be processed soon.');
+
     }
 
     /**
      * Remove the specified IP from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
