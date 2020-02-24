@@ -45,6 +45,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'is_admin' => $request->is_admin,
             ]);
         } catch (QueryException $exception){
             return redirect()->back()->withErrors('Email is already registered.');

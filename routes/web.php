@@ -21,4 +21,12 @@ Route::middleware(['auth', 'check-if-admin'])->group(function () {
     Route::post('/admin/users/add', 'UserController@store')->name('create_user');
 });
 
+Route::middleware(['auth', 'check-if-admin'])->group(function () {
+    Route::any('/admin/ips', 'AuthorizedIpController@index')->name('index_ips');
+    Route::any('/admin/ips/delete/{id}', 'AuthorizedIpController@destroy')->name('delete_ip');
+    Route::get('/admin/ips/add', 'AuthorizedIpController@create')->name('add_ip');
+    Route::post('/admin/ips/add', 'AuthorizedIpController@store')->name('create_ip');
+});
+
+
 Auth::routes();

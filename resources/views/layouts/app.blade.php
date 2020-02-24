@@ -58,6 +58,16 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+
+                                @if(Auth::user()->is_admin)
+                                    <a class="dropdown-item" href="{{ route('index_users') }}">
+                                        {{ __('List Users') }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('index_ips') }}">
+                                        {{ __('List Allowed IPs') }}
+                                    </a>
+                                @endif
+
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -92,17 +102,17 @@
                 </div>
             </div>
         @endif
-            @if (session('success'))
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="alert alert-success">
-                                {{session('success') }}
-                            </div>
+        @if (session('success'))
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-success">
+                            {{session('success') }}
                         </div>
                     </div>
                 </div>
-            @endif
+            </div>
+        @endif
         @yield('content')
     </main>
 </div>
