@@ -16,6 +16,7 @@ class ExchangeRate extends Model
     ];
 
     /**
+     * Only get from currency data excluding it from to currency
      * @param $query
      * @param $fromCurrency
      * @return mixed
@@ -26,6 +27,7 @@ class ExchangeRate extends Model
     }
 
     /**
+     * Get only allowed currency data defined in config file
      * @param $query
      * @return mixed
      */
