@@ -17,7 +17,8 @@ Route::middleware('auth')->any('/', 'ExchangeRateController@index')->name('home'
 Route::middleware(['auth', 'check-if-admin'])->group(function () {
     Route::any('/admin/users', 'UserController@index')->name('index_users');
     Route::any('/admin/users/delete/{id}', 'UserController@destroy')->name('delete_user');
-    Route::any('/admin/users/dd', 'UserController@create')->name('add_user');
+    Route::get('/admin/users/add', 'UserController@create')->name('add_user');
+    Route::post('/admin/users/add', 'UserController@store')->name('create_user');
 });
 
 Auth::routes();

@@ -10,7 +10,7 @@
                             <h1>Users</h1>
                         </div>
                         <div class="offset-md-8 col-2">
-                            <a href="{{ route('add_user') }}" class="btn btn-primary btn-lg">Add User</a>
+                            <a href="{{ route('add_user') }}" class="btn btn-primary">Add User</a>
                         </div>
                     </div>
                 </div>
