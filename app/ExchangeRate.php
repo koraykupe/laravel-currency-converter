@@ -12,6 +12,6 @@ class ExchangeRate extends Model
      * @var array
      */
     protected $fillable = [
-        'from_currency', 'to_currency', 'rate_date',
+        'from_currency', 'to_currency', 'rate_updated_at',
     ];
 }
