@@ -22,6 +22,16 @@ class ExchangeRate extends Model
      */
     public function scopeOfFromCurrency($query, $fromCurrency)
     {
-        return $query->where('from_currency', strtoupper($fromCurrency));
+        return $query->where('from_currency', strtoupper($fromCurrency))->where('to_currency', '!=', strtoupper($fromCurrency));
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeAllowed($query)
+    {
+        $allowedCurrencies = config('currencies.allowed');
+        return $query->whereIn('to_currency', $allowedCurrencies);
     }
 }
