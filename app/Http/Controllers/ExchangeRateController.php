@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\ExchangeRate;
 use App\Http\Requests\ShowExchangeRatesRequest;
-use Illuminate\Http\Request;
 
 class ExchangeRateController extends Controller
 {
