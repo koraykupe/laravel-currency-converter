@@ -12,3 +12,5 @@
 */
 
 Route::any('/', 'ExchangeRateController@index');
+
+Auth::routes();
