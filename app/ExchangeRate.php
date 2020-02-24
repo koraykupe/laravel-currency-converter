@@ -14,4 +14,14 @@ class ExchangeRate extends Model
     protected $fillable = [
         'from_currency', 'to_currency', 'rate_updated_at',
     ];
+
+    /**
+     * @param $query
+     * @param $fromCurrency
+     * @return mixed
+     */
+    public function scopeOfFromCurrency($query, $fromCurrency)
+    {
+        return $query->where('from_currency', strtoupper($fromCurrency));
+    }
 }

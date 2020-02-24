@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    return view('exchange_rates');
-});
+Route::any('/', 'ExchangeRateController@index');

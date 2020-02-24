@@ -78,7 +78,7 @@ class ImportExchangeRates extends Command
             }, $response);
 
             DB::transaction(static function () use ($currency, $exchangeRateFinalData) {
-                ExchangeRate::where('from_currency', $currency)->delete();
+                ExchangeRate::ofFromCurrency($currency)->delete();
                 ExchangeRate::insert($exchangeRateFinalData);
             });
         } catch (Exception $exception) {
