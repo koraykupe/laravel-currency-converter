@@ -20,6 +20,7 @@ class CreateExchangeRatesTable extends Migration
             $table->decimal('rate', 20, 15);
             $table->dateTime('rate_updated_at');
             $table->unique(['from_currency', 'to_currency']);
+            $table->timestamps();
         });
     }
 

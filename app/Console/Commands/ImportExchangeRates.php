@@ -2,20 +2,21 @@
 
 namespace App\Console\Commands;
 
+use App\ExchangeRate;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class ImportExchangeRates extends Command
 {
-    const SERVICE_URL = 'http://www.floatrates.com/daily/eur.json';
+    public const SERVICE_BASE_URL = 'http://www.floatrates.com/daily/';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'import:exchange-rates';
+    protected $signature = 'import:exchange-rates {currency?}';
 
     /**
      * The console command description.
@@ -44,8 +45,33 @@ class ImportExchangeRates extends Command
      */
     public function handle()
     {
-        $request = $this->guzzleClient->get(self::SERVICE_URL);
-        $response = $request->getBody();
-        Log::debug($response);
+        if ($this->argument('currency')) {
+            return $this->getExchangeRates($this->argument('currency'));
+        }
+
+        $allowedCurrencies = config('currencies.allowed');
+        foreach ($allowedCurrencies as $allowedCurrency) {
+            $this->getExchangeRates($allowedCurrency);
+        }
+    }
+
+    /**
+     * @param $currency
+     */
+    private function getExchangeRates($currency)
+    {
+        $request = $this->guzzleClient->get(self::SERVICE_BASE_URL. strtolower($currency). '.json');
+        $response = \GuzzleHttp\json_decode($request->getBody(), true);
+
+        $exchangeRateFinalData = array_map(static function($exchangeRateRawData) use ($currency) {
+            return array(
+                'from_currency' => $currency,
+                'to_currency' => $exchangeRateRawData['code'],
+                'rate' => $exchangeRateRawData['rate'],
+                'rate_updated_at' => Carbon::create($exchangeRateRawData['date']),
+            );
+        }, $response);
+
+        ExchangeRate::insert($exchangeRateFinalData);
     }
 }
