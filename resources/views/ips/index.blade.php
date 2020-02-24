@@ -6,10 +6,10 @@
             <div class="col-md-12">
                 <div class="container">
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-3">
                             <h1>Authorized IPs</h1>
                         </div>
-                        <div class="offset-md-8 col-2">
+                        <div class="offset-md-7 col-2">
                             <a href="{{ route('add_ip') }}" class="btn btn-primary">Add IP</a>
                         </div>
                     </div>
@@ -23,6 +23,7 @@
                             <th scope="col">#</th>
                             <th scope="col">IP</th>
                             <th scope="col">Created At</th>
+                            <th scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>

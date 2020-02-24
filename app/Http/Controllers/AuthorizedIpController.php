@@ -2,83 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\AuthorizationIp;
+use App\Http\Requests\StoreAuthorizedIpRequest;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 class AuthorizedIpController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the IP.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        //
+        $ips = AuthorizationIp::all();
+        return view('ips.index', compact('ips'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new IP.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
-        //
+        return view('ips.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created IP in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreAuthorizedIpRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreAuthorizedIpRequest $request)
     {
-        //
+        try {
+            AuthorizationIp::create(['ip_address' => $request->ip_address]);
+        } catch (QueryException $exception){
+            return redirect()->back()->withErrors('IP is already registered.');
+        }
+        return redirect()->back()->with('success', 'IP has been added successfully.');
     }
 
     /**
-     * Display the specified resource.
+     * Remove the specified IP from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        //
+        AuthorizationIp::findOrFail($id)->delete();
+        Log::info('IP ' . $id . ' deleted');
+        return redirect()->back()->with('success', 'IP deleted successfully');
     }
 }
