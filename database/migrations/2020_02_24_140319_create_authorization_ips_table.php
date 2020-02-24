@@ -15,7 +15,7 @@ class CreateAuthorizationIpsTable extends Migration
     {
         Schema::create('authorization_ips', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->ipAddress('ip_address');
+            $table->ipAddress('ip_address')->unique();
             $table->timestamps();
         });
     }
