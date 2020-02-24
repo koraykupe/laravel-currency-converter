@@ -49,19 +49,20 @@ class ImportExchangeRates extends Command
     public function handle()
     {
         if ($this->argument('currency')) {
-            return $this->getExchangeRates($this->argument('currency'));
+            return $this->fetchAndImportExchangeRates($this->argument('currency'));
         }
 
         $allowedCurrencies = config('currencies.allowed');
         foreach ($allowedCurrencies as $allowedCurrency) {
-            $this->getExchangeRates($allowedCurrency);
+            $this->fetchAndImportExchangeRates($allowedCurrency);
         }
     }
 
     /**
+     * Fetch exchanges rates from the service and import them to db
      * @param $currency
      */
-    private function getExchangeRates($currency)
+    private function fetchAndImportExchangeRates($currency)
     {
         try {
             $request = $this->guzzleClient->get(self::SERVICE_BASE_URL . strtolower($currency) . '.json');
