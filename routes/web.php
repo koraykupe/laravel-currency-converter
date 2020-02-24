@@ -11,6 +11,6 @@
 |
 */
 
-Route::any('/', 'ExchangeRateController@index');
+Route::middleware('auth')->any('/', 'ExchangeRateController@index');
 
 Auth::routes();

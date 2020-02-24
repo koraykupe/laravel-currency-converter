@@ -1,39 +1,7 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-    <title>Exchange Rates Calculator</title>
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- Styles -->
-    <style>
-    </style>
-</head>
-<body>
+@section('content')
 <div class="container">
-    @if (Route::has('login'))
-        <div class="top-right links">
-            @auth
-                <a href="{{ url('/home') }}">Home</a>
-            @else
-                <a href="{{ route('login') }}">Login</a>
-
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}">Register</a>
-                @endif
-            @endauth
-        </div>
-    @endif
-
-    <h1>
-        Exchange Rate Calculator
-    </h1>
-
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -75,7 +43,7 @@
                 <button type="submit" class="btn btn-primary">Convert</button>
             </form>
         </div>
-        @if(isset($exchangeRates))
+        @if($exchangeRates)
             <div class="col-md-12 mt-4">
                 <h5>Results for {{ $fromCurrency . $amount }}:</h5>
                 <div class="table-responsive">
@@ -99,8 +67,5 @@
             </div>
         @endif
     </div>
-
 </div>
-</div>
-</body>
-</html>
+@endsection
