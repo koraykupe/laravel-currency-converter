@@ -81,6 +81,7 @@ class ImportExchangeRates extends Command
             DB::transaction(static function () use ($currency, $exchangeRateFinalData) {
                 ExchangeRate::ofFromCurrency($currency)->delete();
                 ExchangeRate::insert($exchangeRateFinalData);
+                Log::info('Exchange rates were updated for ' . $currency);
             });
         } catch (Exception $exception) {
             Log::debug($exception);
