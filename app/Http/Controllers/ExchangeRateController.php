@@ -11,12 +11,12 @@ class ExchangeRateController extends Controller
     public function index(ShowExchangeRatesRequest $request) {
         $currencies = config('currencies.allowed');
         $exchangeRates = [];
-        $amount = null;
+        $amount = $request->get('amount');
+        $fromCurrency = $request->get('from_currency');
 
         if ($request->method() === 'POST') {
-            $amount = $request->get('amount');
-            $exchangeRates = ExchangeRate::OfFromCurrency($request->get('from_currency'))->get();
+            $exchangeRates = ExchangeRate::OfFromCurrency($fromCurrency)->allowed()->get();
         }
-        return view('exchange_rates', compact('currencies', 'exchangeRates', 'amount'));
+        return view('exchange_rates', compact('currencies', 'exchangeRates', 'amount', 'fromCurrency'));
     }
 }
