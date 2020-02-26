@@ -33,10 +33,10 @@ The project has a docker compose, so you may run it on containers. Alternatively
 - If you want to run the daily scheduler, you may check [Laravel task scheduling setup](https://laravel.com/docs/6.x/scheduling)
 - I created a seeder to create an admin account. You can run `php artisan db:seed` to add it to the db.
 
-# How to Update The Exchange Rates?
+## How to Update The Exchange Rates?
 - You can manually run `php artisan import:exchange-rates`. It will fetch all allowed currency data, but if you want you fetch one specific currency, you can use it with an optional parameter. e.g: `php artisan import:exchange-rates AUD`.  I didn’t add validation, so you may import some data even if code is not in the allowed currencies list.
 
-# What would be done if it is a big scale project?
+## What would be done if it is a big scale project?
 - Allowed currencies for source and target currencies could be set separately
 - Currency symbol support
 - In some currencies symbol/code may be written after the amount
