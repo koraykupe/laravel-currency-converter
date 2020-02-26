@@ -23,7 +23,7 @@ services:
       APP_LOG_FILE: "/var/www/html/storage/logs/laravel.log"
       APP_NAME: "Exchange Rate Calculator"
       DB_HOST: currency_converter_db
-      DB_DATABASE: exchange_rates
+      DB_DATABASE: currency_converter_db
       DB_PASSWORD: "secret"
       DB_PORT: 3306
 
@@ -49,9 +49,9 @@ services:
       - db-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: exchange_rates
+      MYSQL_DATABASE: currency_converter_db
     ports:
-      - 33061:3306
+      - 3306:3306
     expose:
       - 3306
     networks:
