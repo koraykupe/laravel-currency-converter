@@ -1,0 +1,79 @@
+version:  '2'
+
+volumes:
+  db-data:
+  sockets:
+    external: true
+
+services:
+  currency_converter_app:
+    container_name: currency_converter_app
+    build:
+      context: 'docker'
+    volumes:
+      - .:/var/www/html
+      - ./docker/www.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - sockets:/sockets
+    networks:
+      - network
+      - currency_converter_network
+    depends_on:
+      - currency_converter_db
+    environment:
+      APP_LOG_FILE: "/var/www/html/storage/logs/laravel.log"
+      APP_NAME: "Exchange Rate Calculator"
+      DB_HOST: currency_converter_db
+      DB_PORT: 3306
+      REDIS_HOST: redis
+
+  currency_converter_nginx:
+    container_name: currency_converter_nginx
+    image: nginx:1.17
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf
+      - sockets:/sockets
+    ports:
+      - 8000:80
+    networks:
+      - network
+    working_dir: /var/www/html
+    depends_on:
+      - currency_converter_app
+
+  currency_converter_db:
+    container_name: currency_converter_db
+    image: mysql:5.7
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: currency_converter_db
+    ports:
+      - 33061:3306
+    expose:
+      - 3306
+    networks:
+      - network
+    command: ["mysqld",
+              "--innodb-ft-min-token-size=2"]
+  nginx-proxy:
+    container_name: currency_converter_nginx_proxy
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  whoami:
+    image: jwilder/whoami
+    environment:
+      - VIRTUAL_PORT=80
+      - VIRTUAL_HOST=currency-converter.local
+
+networks:
+  network:
+    driver: bridge
+  currency_converter_network:
+    external: true
