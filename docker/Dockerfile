@@ -78,3 +78,5 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 #RUN apache2ctl configtest
 
 RUN chown -R www-data:www-data /var/www
+copy ./run.sh /tmp
+ENTRYPOINT ["/tmp/run.sh"]
