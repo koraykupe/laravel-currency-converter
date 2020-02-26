@@ -1,78 +1,49 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+## Currency Converter
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+This project allows to check exchange rates by given amount and currency. It uses an external services to fetch the data.
+The data can be updated manually, but also updated daily via a cron job.
 
-## About Laravel
+- Based on newest Laravel 6.2 version
+- Followed Laravel way by keeping decoupling
+- Avoided from over-engineering
+- Has an admin role to list/add/delete users and authorized IPs
+- It requires to register and login to use the service. Client IP must be in the authorized IPs table.
+- Allowed currencies can be configured on config file (config/currencies.php)
+- Bootstrap and some npm packages are used for frontend
+- Requests are validated
+- Some useful logging is enabled for successful imports, errors etc. If the API gives an error, it will be logged and error message will be shown on console output.
+- DB transaction is used when updating records. If something goes wrong, old data won’t be deleted (or rollback)
+- Popular [Guzzle](http://docs.guzzlephp.org/en/stable/) library is used for HTTP
+- I didn’t make the service URL interchangable. It would be overkill for such a simple project. But if we want to do that, we could create an interface, use dependency injection and IoC.
+- I didn’t want to make design busy by showing rate updated time.
+- For IP restriction check I used guards. Middleware could be another option, but it is a simple check and guards are more authorisation specific.
+- Gates and policies are for checking ‘abilities’ for a user. User groups are out of scope. (You can still use them btw) Hence, I created a middleware for my simple admin group check.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
+The project has a docker compose, so you may run it on containers. Alternatively, you may use Laravel Valet.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Run `composer install` to install dependency packages
+- Run `npm install && npm run dev` for frontend stuff
+- Run `docker-compose build` and `docker-compose up`
+- Run `docker exec -i currency_converter_app php artisan migrate` to build up database
+- Run `php artisan import:exchange-rates` to update the data
+- The project should be run on `http://localhost:8002/` but it depends on your docker configuration too.
+- You will see a message that says your IP is not in authorized IP list. You can add your IP address to the list using `php artisan add:authorized-ip {your ip}`
+- If you want to run the daily scheduler, you may check [Laravel task scheduling setup](https://laravel.com/docs/6.x/scheduling)
+- I created a seeder to create an admin account. You can run `php artisan db:seed` to add it to the db.
 
-## Learning Laravel
+# How to Update The Exchange Rates?
+- You can manually run `php artisan import:exchange-rates`. It will fetch all allowed currency data, but if you want you fetch one specific currency, you can use it with an optional parameter. e.g: `php artisan import:exchange-rates AUD`.  I didn’t add validation, so you may import some data even if code is not in the allowed currencies list.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# What would be done if it is a big scale project?
+- Allowed currencies for source and target currencies could be set separately
+- Currency symbol support
+- In some currencies symbol/code may be written after the amount
+- For better permission management, `spatie/laravel-permission` is a nice package
+- Creating REST APIs and consume them on frontend
+- For admin group, instead of gates, policies could be better
+- Logs could be moved to events
+- Pagination could be added to user listing
+- Edit for users and IPs
+- Multi language support
