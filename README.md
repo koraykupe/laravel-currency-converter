@@ -47,3 +47,4 @@ The project has a docker compose, so you may run it on containers. Alternatively
 - Pagination could be added to user listing
 - Edit for users and IPs
 - Multi language support
+- Logging exchange rate history
