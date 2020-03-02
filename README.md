@@ -31,7 +31,7 @@ The project has a docker compose, so you may run it on containers. Alternatively
 - The project should be run on `http://localhost:8002/` but it depends on your docker configuration too.
 - You will see a message that says your IP is not in authorized IP list. You can add your IP address to the list using `php artisan add:authorized-ip {your ip}`
 - If you want to run the daily scheduler, you may check [Laravel task scheduling setup](https://laravel.com/docs/6.x/scheduling)
-- I created a seeder to create an admin account. You can run `php artisan db:seed` to add it to the db. After you run it you can login with `koray@letstalk.nl` email and `letstalk` password as an admin.
+- I created a seeder to create an admin account. You can run `php artisan db:seed` to add it to the db. After you run it you can login with `koray@localhost` email and `secretpassword` password as an admin.
 
 ## How to Update The Exchange Rates?
 - You can manually run `php artisan import:exchange-rates`. It will fetch all allowed currency data, but if you want you fetch one specific currency, you can use it with an optional parameter. e.g: `php artisan import:exchange-rates AUD`.  I didn’t add validation, so you may import some data even if code is not in the allowed currencies list.
